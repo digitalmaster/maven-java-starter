@@ -1,0 +1,55 @@
+<configuration>
+    <property name="LOGGING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{32} : %msg %n"/>
+    <property name="CONSOLE_LOGGING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) --- %cyan(%-35.35logger{32}) : %msg %n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${CONSOLE_LOGGING_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- Sifting (by MDC) Daily Rolling File -->
+    <appender name="SiftingAppender" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!-- ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+        <discriminator>
+            <key>logger</key>
+            <defaultValue>app</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="DailyFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${logger}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <!-- daily rollover -->
+                    <FileNamePattern>${logger}.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+                    <!-- keep 5 days' worth of history -->
+                    <maxHistory>5</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <Pattern>${LOGGING_PATTERN}</Pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <!-- Make it async for resourcing purposes -->
+    <appender name="AsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>1000</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="SiftingAppender" />
+    </appender>
+
+    <!-- Application Debugging -->
+    <logger name="edge" level="DEBUG"/>
+
+    <!-- Hibernate loggers to show injected parameter values (? placeholders) in SQL statements -->
+    <!--<logger name="org.hibernate.SQL" level="DEBUG"/>-->
+    <!--<logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>-->
+    <!--<logger name="org.hibernate.stat" level="TRACE"/>-->
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="AsyncAppender"/>
+    </root>
+
+</configuration>
