@@ -24,11 +24,14 @@
 #
 ###
 
+# Desired name of the application on the filesystem
+APP_NAME="TODO"
+
 # The directory in which your application is installed
-APPLICATION_DIR="/opt/TODO/"
+APPLICATION_DIR="/opt/${APP_NAME}/"
 
 # The fat jar containing your application
-APPLICATION_JAR="TODO.jar"
+APPLICATION_JAR="${APP_NAME}.jar"
 
 # Convenience var to get at the full JAR path
 FULL_APP_PATH="${APPLICATION_DIR}/${APPLICATION_JAR}"
