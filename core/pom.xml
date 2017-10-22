@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>core</artifactId>
+    <packaging>jar</packaging>
     <description>Core Application Constructs</description>
 
     <dependencies>
