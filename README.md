@@ -84,4 +84,8 @@ a release can occur. If the branch is needed to be kept rename it with the `vers
 
 ## Deployment
 
-An `initd.sh` is provided and must be filled in with the desired application and service name which will
+An `initd.sh` is provided and must be filled in with the desired application and service name which will automatically run the generated artifact
+on a Linux machine.
+
+Alternatively - a Dockerfile is provided for Docker-based deployments which builds and packages the final artifact into a clean Alpine image.
+This Dockerfile assumes the application can be built with the `mvn package` goal.
